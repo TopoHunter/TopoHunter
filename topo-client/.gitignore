@@ -1,0 +1,8 @@
+__pycache__/
+data/*
+!data/placeholder
+!data/iana_allocated_prefix.dat
+output/*
+!output/placeholder
+config.cfg
+*.zip
