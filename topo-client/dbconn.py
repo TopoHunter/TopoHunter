@@ -33,6 +33,11 @@ class DBConn:
                 self.cursor.executemany(SQL, params)
                 self.conn.commit()
             except Exception as e:
+                if e.args[0] in (2006, 2013):
+                    common.get_logger().error("Connection dropped, reconnecting...")
+                    self.conn = self.get_db_conn()
+                    self.cursor = self.conn.cursor()
+                    return
                 common.get_logger().error("Failed to Insert Nodes: %s, %d times to retry" %
                                           (e, max_tries))
                 self.conn.rollback()
@@ -57,6 +62,11 @@ class DBConn:
             try:
                 self.cursor.execute(SQL, (opr_id))
             except Exception as e:
+                if e.args[0] in (2006, 2013):
+                    common.get_logger().error("Connection dropped, reconnecting...")
+                    self.conn = self.get_db_conn()
+                    self.cursor = self.conn.cursor()
+                    return
                 common.get_logger().error("Failed to Get Nodes: %s, %d time(s) to retry" %
                                           (e, max_tries))
                 ok = False

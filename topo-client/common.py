@@ -2,39 +2,44 @@ import logging
 import os
 import configparser
 
-EXP_NUM = 0
+DIR_PATH = os.path.dirname(os.path.abspath(__file__))
+
+CONFIG_DIR = os.path.join(DIR_PATH, 'config.cfg')
 
 TYPE_TRACEROUTE4 = 1
 TYPE_TRACEROUTE6 = 2
-
 MSG_TYPE_TRACEROUTE4 = 'traceroute4'
 MSG_TYPE_TRACEROUTE4_RESULT = 'traceroute4-result'
-
 MSG_TYPE_TRACEROUTE6 = 'traceroute6'
 MSG_TYPE_TRACEROUTE6_RESULT = 'traceroute6-result'
 
+# Experiment Settings
+# ----------------------------------------
+EXP_NUM = 0
+EXP_DATA_DIR = os.path.join(DIR_PATH, "exp_" + str(EXP_NUM))
+LOG_FILE = os.path.join(EXP_DATA_DIR, "log.log")
+IPASN_FILE = os.path.join(DIR_PATH, "data", "ipasn.dat")
+ALIASED_PREFIXES_FILE = os.path.join(DIR_PATH, "data", "aliased_prefixes.txt")
+# ----------------------------------------
+
+# Server Configs
+# ----------------------------------------
 KAFKA_SERVER = ''
 KAFKA_COMMAND_TOPIC = ''
 KAFKA_RESULT_TOPIC = ''
-
 REDIS_SERVER = ''
-REDIS_PORT = -1
+REDIS_PORT = 6379
+# ----------------------------------------
 
+# Vantage Point Configs
+# ----------------------------------------
+VP_NAME = ''
 LOCAL_IPV4_ADDR = ''
 LOCAL_IPV6_ADDR = ''
-
-
-CONFIG_DIR = 'config.cfg'
-EXP_DATA_DIR = os.path.join(os.path.dirname(__file__), "exp_" + str(EXP_NUM))
-LOG_FILE = os.path.join(EXP_DATA_DIR, "log.log")
-IPASN_FILE = os.path.join(os.path.dirname(__file__), "data", "ipasn.dat")
-ALIASED_PREFIXES_FILE = os.path.join(os.path.dirname(__file__), "data", "aliased_prefixes.txt")
-# Client Side Only
-# ----------------------------------------
 YARRP_DIR = ''
-YARRP_INPUT_DIR = os.path.abspath('./data/yarrp_input.txt')
-YARRP_OUTPUT_DIR = os.path.abspath('./output/yarrp_output_%d_%s.txt')
-PCAP_OUTPUT_DIR = os.path.abspath('./output/pcap_%d_%s.pcap')
+YARRP_INPUT_DIR = os.path.join(DIR_PATH, "data", "yarrp_input.txt")
+YARRP_OUTPUT_DIR = os.path.join(DIR_PATH, "data", "yarrp_output_%d_%s.txt")
+PCAP_OUTPUT_DIR = os.path.join(DIR_PATH, "data", "pcap_%d_%s.pcap")
 INTERFACE_NAME = ''
 MYSQL_HOST = ''
 MYSQL_USER = ''
@@ -45,17 +50,19 @@ MYSQL_DATABASE = ''
 
 def parse_config():
     global YARRP_DIR
+    global INTERFACE_NAME
     global KAFKA_SERVER
     global KAFKA_COMMAND_TOPIC
     global KAFKA_RESULT_TOPIC
     global REDIS_SERVER
     global REDIS_PORT
-    global LOCAL_IPV4_ADDR
-    global LOCAL_IPV6_ADDR
     global MYSQL_HOST 
     global MYSQL_USER 
     global MYSQL_PASSWORD
     global MYSQL_DATABASE
+    global VP_NAME
+    global LOCAL_IPV4_ADDR
+    global LOCAL_IPV6_ADDR
 
     variables = globals()
 
@@ -68,20 +75,16 @@ def parse_config():
             variables[parameter] = yarrp_cfg[parameter]
 
         server_cfg = config_parser['server']
-        for parameter in ['KAFKA_SERVER', 'KAFKA_COMMAND_TOPIC', 'KAFKA_RESULT_TOPIC', 'REDIS_SERVER']:
+        for parameter in ['KAFKA_SERVER', 'KAFKA_COMMAND_TOPIC', 'KAFKA_RESULT_TOPIC', 'REDIS_SERVER', 'REDIS_PORT']:
             variables[parameter] = server_cfg[parameter]
-
-        for parameter in ['REDIS_PORT']:
-            variables[parameter] = int(server_cfg[parameter])
-
-        ip_cfg = config_parser['ip']
-        for parameter in ('LOCAL_IPV4_ADDR', 'LOCAL_IPV6_ADDR'):
-            variables[parameter] = ip_cfg[parameter]
             
         mysql_cfg = config_parser['mysql']
         for parameter in ('MYSQL_HOST', 'MYSQL_USER', 'MYSQL_PASSWORD', 'MYSQL_DATABASE'):
             variables[parameter] = mysql_cfg[parameter]
             
+        vp_cfg = config_parser['vp']
+        for parameter in ('VP_NAME', 'LOCAL_IPV4_ADDR', 'LOCAL_IPV6_ADDR'):
+            variables[parameter] = vp_cfg[parameter]
         os.makedirs(EXP_DATA_DIR, exist_ok=True)
 
     except Exception as e:
