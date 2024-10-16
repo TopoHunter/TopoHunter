@@ -1,0 +1,59 @@
+yarrp-0.8
+---------
+* Fix memory leaks
+* IPv6 subnet probing
+* IPv6 blocklist support
+* Better BGP table support
+* Misc bug fixes
+
+yarrp-0.7
+---------
+* Add IPv6 EH support
+* Add ICMP MPLS extension support
+* FreeBSD verison >=11 fixes
+
+yarrp-0.6
+---------
+* Add blocklist support
+* Option to accept targets from stdin
+* Option to export results to stdout 
+* Structured yrp output format
+* Instance locking
+* Fixed rate control
+* Add minimum TTL option
+* Fast C++ yrp2warts processor
+* Bundle libcperm
+* Misc stability fixes
+
+yarrp-0.5
+---------
+* Add fill mode
+* Support IPv6 on BSD
+* Support multiple simultaneous instances
+* Support ICMP echo reply probes
+
+yarrp-0.4
+---------
+* Multiple IPv6 fixes
+* Support IPv6 BGP tables
+* Support IPv4 ICMP probing
+* Add probe-to-end TTL enhancement
+* Microsecond timestamp support
+* Record permutation seed in output
+* Decoupled probing/receiving support 
+* Beta Internet6-wide probing support
+* Updated yrp2warts utilities
+
+yarrp-0.3
+---------
+* IPv6 support
+* Require libcperm
+
+yarrp-0.2
+---------
+* Support UDP probing
+* Configurable transport destination port
+
+yarrp-0.1
+---------
+* Initial public release

@@ -1,0 +1,8 @@
+kafka
+kafka_python
+redis
+ipaddress
+tqdm
+pyasn
+pymysql
+cryptography

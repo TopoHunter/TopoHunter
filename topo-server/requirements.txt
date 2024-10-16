@@ -1,0 +1,9 @@
+kafka
+kafka_python
+neo4j
+pygraphviz
+pymysql
+redis
+cryptography
+tqdm
+pyasn
